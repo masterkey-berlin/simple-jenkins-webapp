@@ -1,10 +1,6 @@
 // Jenkinsfile
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11'
-        }
-    }
+    agent any
 
     stages {
         stage('Checkout') {
@@ -24,8 +20,8 @@ pipeline {
         }
         stage('Build') {
             steps {
-                echo 'Baue im Docker-Container...'
-                sh 'python --version'
+                echo 'Baue das Projekt ohne Docker...'
+                sh 'echo Hello World'
             }
         }
     }
