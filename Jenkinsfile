@@ -2,8 +2,7 @@
 pipeline {
     agent {
         docker {
-            image 'node:22-alpine' // Oder eine andere passende Node.js Version, z.B. node:20-alpine
-            args '-u root' // Manchmal notwendig, um Berechtigungsprobleme im Container zu vermeiden
+            image 'python:3.11'
         }
     }
 
@@ -21,6 +20,12 @@ pipeline {
                 sh 'npm ci'
                 sh 'npm run build'
                 echo 'Application build finished.'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Baue im Docker-Container...'
+                sh 'python --version'
             }
         }
     }
