@@ -1,29 +1,31 @@
 // Jenkinsfile
 pipeline {
-    agent any // Definiert, wo die Pipeline ausgeführt wird (hier: jeder verfügbare Agent)
+    agent {
+        docker {
+            image 'node:22-alpine' // Oder eine andere passende Node.js Version, z.B. node:20-alpine
+            args '-u root' // Manchmal notwendig, um Berechtigungsprobleme im Container zu vermeiden
+        }
+    }
 
     stages {
-        stage('Checkout') { // Erste Stufe: Code aus dem SCM holen
+        stage('Checkout') {
             steps {
-                // Dieser Step holt den Code basierend auf der SCM-Konfiguration im Jenkins-Job
                 checkout scm
                 echo 'Code checkout complete.'
             }
         }
-        stage('Build Application') { // Zweite Stufe: Die Webanwendung bauen
+        stage('Build Application') {
             steps {
                 echo 'Starting application build...'
-                // Diese Befehle werden in der Workspace-Shell des Jenkins-Agenten ausgeführt
-                // Stelle sicher, dass Node.js auf dem Agenten verfügbar ist
-                // (Das offizielle jenkins/jenkins:lts Image hat oft Node.js, sonst muss man es installieren oder einen Docker Agent nutzen)
-                sh 'npm ci'       // Abhängigkeiten installieren
-                sh 'npm run build'  // Build-Skript ausführen
+                // Diese Befehle werden jetzt im Node.js Docker Container ausgeführt
+                sh 'npm ci'
+                sh 'npm run build'
                 echo 'Application build finished.'
             }
         }
     }
 
-    post { // Aktionen, die nach allen Stages ausgeführt werden (optional)
+    post {
         always {
             echo 'Pipeline run finished.'
         }
