@@ -1,6 +1,11 @@
 // Jenkinsfile
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:22-alpine' // Oder eine andere passende Node.js Version, z.B. node:20-alpine
+            // args '-u root' // Nur hinzufügen, wenn du später Berechtigungsprobleme bekommst
+        }
+    }
 
     stages {
         stage('Checkout') {
@@ -16,12 +21,6 @@ pipeline {
                 sh 'npm ci'
                 sh 'npm run build'
                 echo 'Application build finished.'
-            }
-        }
-        stage('Build') {
-            steps {
-                echo 'Baue das Projekt...'
-                sh 'echo Hello World'
             }
         }
     }
