@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                echo 'Baue das Projekt ohne Docker...'
+                echo 'Baue das Projekt...'
                 sh 'echo Hello World'
             }
         }
